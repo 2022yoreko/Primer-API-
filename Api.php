@@ -62,10 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
 elseif ($_SERVER['REQUEST_METHOD'] === 'PUT' && isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Asegúrate de que se envíen otros datos necesarios
-    if (isset($_POST['nombre'], $_POST['password'])) {
-        $nombre = $_POST['nombre'];
-        $password = $_POST['password'];
+    // Asegurarse de enviar todos los datos necesarios
+    $putData = json_decode(file_get_contents('php://input'), true);
+    if (isset($putData['nombre'], $putData['password'])) {
+        $nombre = $putData['nombre'];
+        $password = $putData['password'];
 
         // Actualiza el usuario
         $sql = "UPDATE usuario SET nombre='$nombre', password='$password' WHERE id='$id'";
@@ -78,6 +79,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'PUT' && isset($_GET['id'])) {
     } else {
         echo "Faltan datos necesarios en la solicitud PUT.";
     }
+    
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['id'])) {
     $id = $_GET['id'];
 
